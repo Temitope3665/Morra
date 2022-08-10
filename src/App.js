@@ -1,12 +1,11 @@
 import './App.css';
-import { loadStdlib } from '@reach-sh/stdlib';
-import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib';
-import * as backend from './reach/build/index.main.mjs'
-import { useEffect, useState } from 'react';
-import { views, Loader } from './utils/';
-import { ConnectAccount, PasteContractInfo, SelectRole, TestView, WaitForAttacher } from './screens';
+// import { loadStdlib } from '@reach-sh/stdlib';
+// import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib';
+// import * as backend from './reach/build/index.main.mjs'
+import { useState } from 'react';
+import { views } from './utils/';
+// import { ConnectAccount, PasteContractInfo, SelectRole, TestView, WaitForAttacher } from './screens';
 import LandingPage from './screens/LandingPage';
-import { bg } from './svg';
 import { Box } from '@chakra-ui/react';
 import SelectGame from './screens/SelectGame';
 import CreateGame from './screens/CreateGame';

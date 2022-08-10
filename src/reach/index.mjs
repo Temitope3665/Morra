@@ -1,5 +1,6 @@
 import {loadStdlib} from '@reach-sh/stdlib';
 import * as backend from './build/index.main.mjs';
+
 const stdlib = loadStdlib(process.env);
 
 const startingBalance = stdlib.parseCurrency(100);
@@ -7,7 +8,7 @@ const startingBalance = stdlib.parseCurrency(100);
 const [ accAlice, accBob, accCharlie ] =
   await stdlib.newTestAccounts(3, startingBalance);
 
-console.log('Welcome to Morra!');
+console.log('Welcome to Morra Game!');
 const ctcAlice = accAlice.contract(backend);
 const ctcBob = accBob.contract(backend, ctcAlice.getInfo());
 const ctcCharlie = accCharlie.contract(backend, ctcAlice.getInfo());
@@ -45,3 +46,4 @@ await Promise.all([
 ]);
 
 console.log('Goodbye, Alice, Bob and Charlie!');
+

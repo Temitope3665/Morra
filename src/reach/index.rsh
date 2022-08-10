@@ -1,3 +1,6 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 'reach 0.1';
 
 // const [isHand, ZERO_FINGER, ONE_FINGER, TWO_FINGER, THREE_FINGER, FOUR_FINGER, FIVE_FINGER] = makeEnum(6)
@@ -77,3 +80,4 @@ export const main = Reach.App(() => {
   });
   exit();
 });
+

@@ -1,8 +1,5 @@
 'reach 0.1';
 
-// const [isHand, ZERO_FINGER, ONE_FINGER, TWO_FINGER, THREE_FINGER, FOUR_FINGER, FIVE_FINGER] = makeEnum(6)
-// const [isOutcome, A_WINS, B_WINS, C_WINS, NO_WINNER] = makeEnum(4)
-
 const Player = {
   ...hasRandom,
   makeGuess: Fun([], UInt),
@@ -13,36 +10,46 @@ const Player = {
 export const main = Reach.App(() => {
   const Alice = Participant('Alice', {
     ...Player,
+    wager: UInt
     // Specify Alice's interact interface here
   });
   const Bob = Participant('Bob', {
     ...Player,
+    acceptWager: Fun([UInt], Null)
     // Specify Bob's interact interface here
   });
   const Charlie = Participant('Charlie', {
     ...Player,
+    acceptWager: Fun([UInt], Null)
   });
   init();
 
   // Make Guess
   // The first one to publish deploys the contract
   Alice.only(() => {
+    const wager = declassify(interact.wager);
     const aliceGuess = declassify(interact.makeGuess());
+
   })
-  Alice.publish(aliceGuess);
+  Alice.publish(wager, aliceGuess)
+    .pay(wager);
   commit();
 
   // Others always attach
   Bob.only(() => {
+    interact.acceptWager(wager);
     const bobGuess = declassify(interact.makeGuess());
   })
-  Bob.publish(bobGuess);
+  Bob.publish(bobGuess)
+    .pay(wager);
   commit();
   
   Charlie.only(() => {
+    interact.acceptWager(wager);
     const charlieGuess = declassify(interact.makeGuess());
   })
-  Charlie.publish(charlieGuess);
+  Charlie.publish(charlieGuess)
+    .pay(wager);
   commit();
 
   // Show hand
@@ -69,7 +76,16 @@ export const main = Reach.App(() => {
     total == charlieGuess ? 3 :
     0
 
-  
+  if (outcome != 0) {
+    outcome == 1 ? transfer(wager * 3).to(Alice) :
+    outcome == 2 ? transfer(wager * 3).to(Bob) :
+    transfer(wager * 3).to(Charlie)
+  } else {
+    transfer(wager).to(Alice);
+    transfer(wager).to(Bob);
+    transfer(wager).to(Charlie);
+  }
+
   commit();
 
   each([Alice, Bob, Charlie], () => {

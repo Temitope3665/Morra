@@ -31,9 +31,9 @@ const Player = (name) => ({
     console.log(`${name} guessed ${guess}`);
     return guess;
   },
-  showHand: () => {
+  throwHand: () => {
     const hand = Math.floor(Math.random() * 6);
-    console.log(`${name} showed ${hand} fingers`);
+    console.log(`${name} throwed ${hand} fingers`);
     return hand;
   },
   getResult: (outcome) => {

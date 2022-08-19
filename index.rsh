@@ -3,7 +3,7 @@
 const Player = {
   ...hasRandom,
   makeGuess: Fun([], UInt),
-  showHand: Fun([], UInt),
+  throwHand: Fun([], UInt),
   getResult: Fun([UInt], Null),
 };
 
@@ -29,9 +29,12 @@ export const main = Reach.App(() => {
   Alice.only(() => {
     const wager = declassify(interact.wager);
     const aliceGuess = declassify(interact.makeGuess());
+    const _aliceHand = interact.throwHand();
+    const [_aliceHandCommit, _aliceSalt] = makeCommitment(interact, _aliceHand);
+    const aliceHandCommit = declassify(_aliceHandCommit);
 
   })
-  Alice.publish(wager, aliceGuess)
+  Alice.publish(wager, aliceGuess, aliceHandCommit)
     .pay(wager);
   commit();
 
@@ -39,34 +42,42 @@ export const main = Reach.App(() => {
   Bob.only(() => {
     interact.acceptWager(wager);
     const bobGuess = declassify(interact.makeGuess());
+    const _bobHand = interact.throwHand();
+    const [_bobHandCommit, _bobSalt] = makeCommitment(interact, _bobHand);
+    const bobHandCommit = declassify(_bobHandCommit);
   })
-  Bob.publish(bobGuess)
+  Bob.publish(bobGuess, bobHandCommit)
     .pay(wager);
   commit();
   
   Charlie.only(() => {
     interact.acceptWager(wager);
     const charlieGuess = declassify(interact.makeGuess());
+    const charlieHand = declassify(interact.throwHand());
   })
-  Charlie.publish(charlieGuess)
+  Charlie.publish(charlieGuess, charlieHand)
     .pay(wager);
   commit();
 
+  unknowable(Bob, Alice(_aliceHand, _aliceSalt));
+  unknowable(Charlie, Alice(_aliceHand, _aliceSalt));
+  unknowable(Charlie, Bob(_bobHand, _bobSalt));
+
   // Show hand
   Alice.only(() => {
-    const aliceHand = declassify(interact.showHand());
+    const aliceSalt = declassify(_aliceSalt);
+    const aliceHand = declassify(_aliceHand);
   });
-  Alice.publish(aliceHand);
+  Alice.publish(aliceHand, aliceSalt);
+  checkCommitment(aliceHandCommit, aliceHand, aliceSalt);
   commit();
+
   Bob.only(() => {
-    const bobHand = declassify(interact.showHand());
+    const bobSalt = declassify(_bobSalt);
+    const bobHand = declassify(_bobHand);
   });
-  Bob.publish(bobHand);
-  commit();
-  Charlie.only(() => {
-    const charlieHand = declassify(interact.showHand());
-  });
-  Charlie.publish(charlieHand);
+  Bob.publish(bobHand, bobSalt);
+  checkCommitment(bobHandCommit, bobSalt, bobHand);
   
   // Calculate outcome
   const total = (aliceHand + bobHand + charlieHand);

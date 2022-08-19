@@ -69,7 +69,7 @@ export const main = Reach.App(() => {
     const aliceHand = declassify(_aliceHand);
   });
   Alice.publish(aliceHand, aliceSalt);
-  checkCommitment(aliceHandCommit, aliceHand, aliceSalt);
+  checkCommitment(aliceHandCommit, aliceSalt, aliceHand);
   commit();
 
   Bob.only(() => {

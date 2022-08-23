@@ -1,15 +1,9 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Select, Text, Textarea } from "@chakra-ui/react";
 import CommonButton from "../common/CommonButton";
 import TextInput from "../common/TextInput";
 import { logo } from "../svg";
 
-const CreateGame = ({
-  handleCreateGame,
-  accountBal,
-  getStakePrice,
-  getGuessNumber,
-  isLoading,
-}) => {
+const InputUserType = ({ playGame, accountBal, getUserType, getUserGuess, isLoading, getContractDetails }) => {
   return (
     <Box>
       <Flex justifyContent="space-between" alignItems="center" px="50px">
@@ -30,33 +24,45 @@ const CreateGame = ({
         </Flex>
       </Flex>
 
-      <Box mt="50px">
-        <Text color="brand.white">Fill in the form to create your game</Text>
+      <Box mt="50px" fontSize="14px">
+        <Text color="brand.white">Kindly fill the form to play game</Text>
 
         <Box w="30%" justifyContent="center" m="20px auto">
           <form>
             <TextInput
-              label="Enter Guess"
-              placeholder="Enter your guess here"
-              type="number"
-              onChange={(e) => getGuessNumber(e.target.value)}
+              label="Name"
+              placeholder="Enter your first name"
+              type="text"
+              onChange={(e) => getUserType(e.target.value)}
             />
             <TextInput
-              label="Stake Price"
-              placeholder="Enter your stake price"
-              type="number"
-              onChange={(e) => getStakePrice(e.target.value)}
+              label="Enter guess"
+              placeholder="Enter your guess"
+              type="text"
+              onChange={(e) => getUserGuess(e.target.value)}
             />
+
+            <Textarea
+                _focus={{ border: "0.5px solid #F58220" }}
+                h="200px"
+                w="100%"
+                mt="20px"
+                onChange={(e) => getContractDetails(e.target.value)}
+                placeholder="Paste contract details"
+                color="brand.dark"
+                bg="white"
+                border="1px solid #F58220"
+              />
             <CommonButton
               w="100%"
               color="brand.dark"
               bg="brand.primary"
               mt="20px"
               hoverColor="brand.white"
-              onClick={handleCreateGame}
+              onClick={playGame}
               isLoading={isLoading}
             >
-              Create Game
+              Proceed
             </CommonButton>
           </form>
         </Box>
@@ -65,4 +71,4 @@ const CreateGame = ({
   );
 };
 
-export default CreateGame;
+export default InputUserType;

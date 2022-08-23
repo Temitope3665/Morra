@@ -7,6 +7,7 @@ export const views = {
   PLAY_GAME_NOW: 'Play game now',
   JOIN_GAME: 'Join game',
   SUBMIT_HAND: 'Submit hand',
+  USER_TYPE: 'User type',
 
   //Deployer
   DEPLOYING: 'Deploying',

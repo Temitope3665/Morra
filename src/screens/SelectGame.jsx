@@ -2,7 +2,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import CommonButton from "../common/CommonButton";
 import { logo } from "../svg";
 
-const SelectGame = ({ gotoCreateGame, gotoPlayGame }) => {
+const SelectGame = ({ createGame, joinGame, accountBal }) => {
     return (
         <Box>
             <Flex justifyContent="space-between" alignItems="center" px="50px">
@@ -15,7 +15,7 @@ const SelectGame = ({ gotoCreateGame, gotoPlayGame }) => {
                 </Flex>
                 <Flex alignItems="center" color="brand.white">
                     <Text>Current Bal: </Text>
-                    <Text color="brand.primary" fontWeight="500" ml="10px">100ETH</Text>
+                    <Text color="brand.primary" fontWeight="500" ml="10px">{accountBal} ALGO</Text>
                 </Flex>
             </Flex>
 
@@ -24,10 +24,10 @@ const SelectGame = ({ gotoCreateGame, gotoPlayGame }) => {
             </Box>
 
             <Flex mt="50px" justifyContent="center">
-                <CommonButton mr="15px" bg="none" border="1px solid #FFF" color="brand.white" onClick={gotoCreateGame}>
+                <CommonButton mr="15px" bg="none" border="1px solid #FFF" color="brand.white" onClick={createGame}>
                     Create Game
                 </CommonButton>
-                <CommonButton bg="brand.white" color="brand.dark" hover="none" border="1px solid #FFF" onClick={gotoPlayGame}>
+                <CommonButton bg="brand.white" color="brand.dark" hover="none" border="1px solid #FFF" onClick={joinGame}>
                     Join Game
                 </CommonButton>
             </Flex>

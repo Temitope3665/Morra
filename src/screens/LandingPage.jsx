@@ -2,7 +2,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import CommonButton from "../common/CommonButton";
 import { logo } from "../svg";
 
-const LandingPage = ({ handleClick }) => {
+const LandingPage = ({ handleConnect }) => {
     return (
         <Box>
             <Flex justifyContent="space-between" alignItems="center" px="50px">
@@ -25,7 +25,7 @@ const LandingPage = ({ handleClick }) => {
             </Box>
 
             <Box mt="10px">
-                <CommonButton bg="none" border="1px solid #F58220" color="brand.primary" onClick={handleClick}>
+                <CommonButton bg="none" border="1px solid #F58220" color="brand.primary" onClick={handleConnect}>
                     Connect Wallet
                 </CommonButton>
             </Box>

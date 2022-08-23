@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react";
 
-const CommonButton = ({ children, bg, color, onClick, border, mr, hover, w, mt, hoverColor }) => (
+const CommonButton = ({ children, bg, color, onClick, border, mr, hover, w, mt, hoverColor, isLoading }) => (
   <Button
     w={w || "170px"}
     h="55px"
@@ -14,6 +14,7 @@ const CommonButton = ({ children, bg, color, onClick, border, mr, hover, w, mt, 
     border={border}
     mt={mt}
     type="submit"
+    isLoading={isLoading}
   >
     {children}
   </Button>

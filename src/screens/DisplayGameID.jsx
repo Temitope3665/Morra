@@ -1,7 +1,10 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, Textarea } from "@chakra-ui/react";
 import { logo } from "../svg";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { toaster } from "evergreen-ui";
+import CommonButton from "../common/CommonButton";
 
-const DisplayGameID = ({ playGame }) => {
+const DisplayGameID = ({ playGame, accountBal, contractInfo }) => {
   return (
     <Box>
       <Flex justifyContent="space-between" alignItems="center" px="50px">
@@ -17,7 +20,7 @@ const DisplayGameID = ({ playGame }) => {
         <Flex alignItems="center" color="brand.white">
           <Text>Current Bal: </Text>
           <Text color="brand.primary" fontWeight="500" ml="10px">
-            100ETH
+            {accountBal} ALGO
           </Text>
         </Flex>
       </Flex>
@@ -25,18 +28,19 @@ const DisplayGameID = ({ playGame }) => {
       <Box mt="50px" w="30%" m="20px auto">
         <Text color="brand.white">You’re the only one here</Text>
         <Text color="brand.primary">
-          Share this unique ID with others that you want to play the game with
+          Share this contract details with others that you want to play the game with
         </Text>
         <Box
           w="100%"
-          bg="rgba(190, 135, 135, 0.58)"
           borderRadius="8px"
           mt="20px"
         >
-          <Text fontSize="20px" color="brand.white" mt="10px" py="40px">
-            367722IHYD89932
-          </Text>
+        <Textarea mt="20px" readOnly border="1px solid #23D186" bg="white" p="20px" value={contractInfo} />
         </Box>
+
+        <CopyToClipboard text={contractInfo} onCopy={() => toaster.success("Contract Info copied successfully")}>
+            <CommonButton mt="20px" w="100%" bg="none" h="50px" border="1px solid #F58220" color="brand.white">Copy to clipboard</CommonButton>
+        </CopyToClipboard>
       </Box>
 
       <Button

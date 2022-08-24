@@ -13,7 +13,7 @@ const LandingPage = ({ handleConnect }) => {
                         <Text ml="40px">Support</Text>
                     </Flex>
                 </Flex>
-                <CommonButton color="brand.white" bg="brand.primary">Play Now</CommonButton>
+                <CommonButton color="brand.white" bg="brand.primary" hoverColor="brand.dark">Play Now</CommonButton>
             </Flex>
 
             <Box mt="50px">

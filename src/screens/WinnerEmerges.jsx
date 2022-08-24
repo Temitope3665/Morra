@@ -38,7 +38,7 @@ const WinnerEmerges = ({
         </Flex>
       </Flex>
 
-      <Image src={imgLink} alt="congrats" w="200px" m="0 auto" />
+      <Image src={imgLink} alt="congrats" w="200px" m="-10px auto" />
       <Box mt="20px">
         <Text color="brand.primary" fontWeight="700" mt="20px">
           {winnerName}
@@ -49,7 +49,7 @@ const WinnerEmerges = ({
         p="20px 0px"
         borderRadius="8px"
         fontSize="16px"
-        m="15px auto"
+        m="10px auto"
         w="35%"
       >
         <Text>RESULT BOARD</Text>
@@ -70,7 +70,7 @@ const WinnerEmerges = ({
         </Flex>
         <Flex color="brand.primary" justifyContent="space-around" mt="20px">
           <Text>Charlie</Text>
-          <Text>{charlieGuess}</Text>
+          <Text ml="-10px">{charlieGuess}</Text>
           <Text>{charlieHand}</Text>
         </Flex>
       </Box>

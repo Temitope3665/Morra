@@ -91,7 +91,7 @@ function App() {
       try {
         account.current = await reach.getDefaultAccount();
         setAccount(account);
-        toaster.success(`Account connected successfully`);
+        toaster.success(`Account balance generated successfully`);
       } catch (err) {
         toaster.danger(`Error occured, can't retrieve your account`)
       }
@@ -102,7 +102,6 @@ function App() {
         let rawBalance = await reach.balanceOf(account.current);
         balance.current = reach.formatCurrency(rawBalance, 4);
         setAccountBal(balance.current);
-        console.log("Balance :" + balance.current);
       } catch (err) {
         toaster.danger('Error occured')
       }
@@ -139,8 +138,9 @@ function App() {
 
   const Player = (name) => ({
     makeGuess: () => {
-      console.log(`${name} guessed ${userGuess}`);
-      toaster.success(`You guessed ${userGuess}`);
+      toaster.success(`You guessed ${userGuess}`, {
+        duration: 1
+      });
       return userGuess;
     },
     getGuesses: (aliceGuess, bobGuess, charlieGuess) => {
@@ -162,13 +162,10 @@ function App() {
       return hand;
     },
     getResult: (outcome, aliceHand, bobHand, charlieHand) => {
-      console.log(outcome, '--> outcome res');
       toaster.success(`${name} saw result: ${OUTCOME[outcome]}`);
       setAliceHand(`${aliceHand}`);
       setBobHand(`${bobHand}`);
       setCharlieHand(`${charlieHand}`);
-      console.log(aliceHand, bobHand, charlieHand);
-      console.log(`this is ${aliceHand}`, aliceHand, bobHand, charlieHand);
       setWinner(`${OUTCOME[outcome]}`);
       setView(views.WINNER);
     },
@@ -191,7 +188,6 @@ function App() {
       }
       const ctcAlice = await account.current.contract(backend);
       await ctcAlice.participants.Alice(aliceInteract);
-      console.log(ctcAlice, '--> on await');
     } catch (error) {
       toaster.danger('Error occured')
       setIsLoading(false);
@@ -220,7 +216,6 @@ function App() {
         await ctcBob.participants.Bob(bobInteract);
       } catch (error) {
         toaster.danger('Error occured');
-        console.log(error);
       };
     } else if (userType === 'Charlie') {
       try {
@@ -241,7 +236,6 @@ function App() {
         await ctcCharlie.participants.Charlie(charlieInteract);
       } catch (error) {
         toaster.danger('Error occured')
-        console.log(error);
       }
     }
   };

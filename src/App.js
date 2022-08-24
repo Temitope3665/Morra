@@ -9,9 +9,7 @@ import { Box } from '@chakra-ui/react';
 import SelectGame from './screens/SelectGame';
 import CreateGame from './screens/CreateGame';
 import DisplayGameID from './screens/DisplayGameID';
-import PlayGameNow from './screens/PlayGameNow';
 import JoinGame from './screens/JoinGame';
-import Result from './screens/Result';
 import { toaster } from 'evergreen-ui';
 import InputUserType from './screens/InputUserType';
 import WaitingOthers from './screens/WaitingOthers';
@@ -19,7 +17,6 @@ import WinnerEmerges from './screens/WinnerEmerges';
 
 const reach = loadStdlib('ALGO');
 reach.setWalletFallback(reach.walletFallback( { providerEnv: 'TestNet', MyAlgoConnect } ));
-// const fmt = (x) => reach.formatCurrency(x, 4);
 
 function App() {
   const [ view, setView ] = useState(views.CONNECT_ACCOUNT);
@@ -35,7 +32,6 @@ function App() {
   const [winner, setWinner] = useState('');
   const [displayNewBal, setDisplayNewBal] = useState(false);
   const [aliceGuess, setAliceGuess] = useState();
-  // const [displayUserHand, setDisplayUserHand] = useState('');
   const [aliceHand, setAliceHand] = useState();
   const [bobHand, setBobHand] = useState();
   const [bobGuess, setBobGuess] = useState();
@@ -306,8 +302,6 @@ function App() {
             accountBal={accountBal === '' ? 0 : accountBal} 
           />
         }
-        {view === views.PLAY_GAME_NOW && <PlayGameNow handleJoinGame={() => setView(views.JOIN_GAME)} />}
-        {view === views.SUBMIT_HAND && <Result goHome={() => setView(views.CONNECT_ACCOUNT)} />}
       </header>
     </Box>
   );

@@ -36,14 +36,19 @@ const Player = (name) => ({
     console.log(`${name} guessed ${guess}`);
     return guess;
   },
+  getGuesses: (aliceGuess, bobGuess, charlieGuess) => {
+    console.log(`${name} saw guesses: Alice ${aliceGuess}, Bob ${bobGuess}, charlie ${charlieGuess}`);
+  },
   throwHand: () => {
     const hand = Math.floor(Math.random() * 6);
     console.log(`${name} throwed ${hand} fingers`);
     return hand;
   },
-  getResult: (outcome) => {
+  getResult: (outcome, aliceHand, bobHand, charlieHand) => {
     console.log(`${name} saw result: ${OUTCOME[outcome]}`);
+    console.log(`Alice played ${aliceHand}, Bob played ${bobHand} and Charlie played ${charlieHand}\n`);
   }
+
 })
 console.log('Starting backends...');
 await Promise.all([

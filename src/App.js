@@ -34,6 +34,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [winner, setWinner] = useState('');
   const [displayNewBal, setDisplayNewBal] = useState(false);
+  const [aliceGuess, setAliceGuess] = useState();
+  // const [displayUserHand, setDisplayUserHand] = useState('');
+  const [aliceHand, setAliceHand] = useState();
+  const [bobHand, setBobHand] = useState();
+  const [bobGuess, setBobGuess] = useState();
+  const [charlieHand, setCharlieHand] = useState();
+  const [charlieGuess, setCharlieGuess] = useState();
 
   const stdlib = loadStdlib(process.env);
   const toAU = (au) => stdlib.parseCurrency(au);
@@ -130,22 +137,40 @@ function App() {
     setHand(Number(handValue));
   };
 
-  const PlayerMakeGuess = (name) => ({
+  const Player = (name) => ({
     makeGuess: () => {
       console.log(`${name} guessed ${userGuess}`);
-      toaster.success(`${name} guessed ${userGuess}`);
+      toaster.success(`You guessed ${userGuess}`);
       return userGuess;
+    },
+    getGuesses: (aliceGuess, bobGuess, charlieGuess) => {
+      toaster.success(
+        userType === 'Alice' ? `You guessed ${aliceGuess}, Bob guessed ${bobGuess} and Charlie guessed ${charlieGuess}` : 
+        userType === 'Bob' ? `You guessed ${bobGuess}, Alice guessed ${aliceGuess} and Charlie guessed ${charlieGuess}` : `You guessed
+        ${charlieGuess}, Alice guessed ${aliceGuess} and Bob guessed ${bobGuess}`, {
+        duration: 30
+        }
+      )
+      setAliceGuess(`${aliceGuess}`);
+      setBobGuess(`${bobGuess}`);
+      setCharlieGuess(`${charlieGuess}`);
+      console.log(aliceGuess, bobGuess, charlieGuess);
     },
     throwHand: () => {
       console.log(`The ${name} made a ${hand}`);
       toaster.success(`The ${name} made a ${hand}`);
       return hand;
     },
-    getResult: (outcome) => {
+    getResult: (outcome, aliceHand, bobHand, charlieHand) => {
       console.log(outcome, '--> outcome res');
       toaster.success(`${name} saw result: ${OUTCOME[outcome]}`);
+      setAliceHand(`${aliceHand}`);
+      setBobHand(`${bobHand}`);
+      setCharlieHand(`${charlieHand}`);
+      console.log(aliceHand, bobHand, charlieHand);
+      console.log(`this is ${aliceHand}`, aliceHand, bobHand, charlieHand);
       setWinner(`${OUTCOME[outcome]}`);
-      setView(views.WINNER)
+      setView(views.WINNER);
     },
   });
 
@@ -154,7 +179,7 @@ function App() {
     try {
       setIsLoading(true);
       const aliceInteract = {
-        ...PlayerMakeGuess('Alice'),
+        ...Player('Alice'),
         ...stdlib.hasRandom,
         wager: toAU(stakePrice),
         reportReady: async (stakePrice) => {
@@ -180,7 +205,7 @@ function App() {
       try {
         setIsLoading(true);
         const bobInteract = {
-          ...PlayerMakeGuess('Bob'),
+          ...Player('Bob'),
           ...stdlib.hasRandom,
           acceptWager: (amt) => {
             toaster.success(`Bob accepts the wager of ${amt}`);
@@ -201,7 +226,7 @@ function App() {
       try {
         setIsLoading(true);
         const charlieInteract = {
-          ...PlayerMakeGuess('Charlie'),
+          ...Player('Charlie'),
           ...stdlib.hasRandom,
           acceptWager: (amt) => {
             toaster.success(`Charlie accepts the wager of ${amt}`);
@@ -273,6 +298,12 @@ function App() {
             displayNewBal={displayNewBal}
             goHome={() => setView(views.CREATE_GAME)}
             winnerName={winner}
+            bobGuess={bobGuess}
+            bobHand={bobHand}
+            aliceHand={aliceHand}
+            aliceGuess={aliceGuess}
+            charlieGuess={charlieGuess}
+            charlieHand={charlieHand}
           />
         }
         {view === views.JOIN_GAME && 

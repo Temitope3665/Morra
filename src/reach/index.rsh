@@ -7,9 +7,10 @@
 const Player = {
   ...hasRandom,
   makeGuess: Fun([], UInt),
+  getGuesses: Fun([UInt, UInt, UInt], Null),
   throwHand: Fun([], UInt),
-  getResult: Fun([UInt], Null),
   showAllHand: Fun([UInt], Null),
+  getResult: Fun([UInt, UInt, UInt, UInt], Null),
   informTimeout: Fun([], Null),
 };
 
@@ -61,6 +62,10 @@ export const main = Reach.App(() => {
   Charlie.publish(charlieGuess)
     .pay(wager);
   Charlie.interact.reportReady(wager);
+
+  each([Alice, Bob, Charlie], () => {
+    interact.getGuesses(aliceGuess, bobGuess, charlieGuess);
+  });
 
   // Start throwing hand until there's a winner
   var outcome = 0;
@@ -114,11 +119,17 @@ export const main = Reach.App(() => {
   
     // Calculate outcome
     const total = (aliceHand + bobHand + charlieHand);
-    outcome = 
-      total == aliceGuess ? 1 : 
-      total == bobGuess ? 2 : 
-      total == charlieGuess ? 3 :
-      0
+    const winner = 
+    total == aliceGuess ? 1 : 
+    total == bobGuess ? 2 : 
+    total == charlieGuess ? 3 :
+    0
+
+    each([Alice, Bob, Charlie], () => {
+      interact.getResult(winner, aliceHand, bobHand, charlieHand);
+    });
+
+    outcome = winner;
     continue;
   }
 
@@ -127,9 +138,6 @@ export const main = Reach.App(() => {
     transfer(wager * 3).to(Charlie)
   commit();
 
-  each([Alice, Bob, Charlie], () => {
-    interact.getResult(outcome);
-  });
   exit();
 });
 

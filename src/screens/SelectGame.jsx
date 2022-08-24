@@ -4,7 +4,7 @@ import { logo } from "../svg";
 
 const SelectGame = ({ createGame, joinGame, accountBal }) => {
     return (
-        <Box>
+        <Box h="100vh">
             <Flex justifyContent="space-between" alignItems="center" px="50px">
                 <Flex alignItems="center" fontSize="18px">
                     <Box mr="100px" cursor="pointer">{logo}</Box>

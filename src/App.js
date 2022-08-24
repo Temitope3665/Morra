@@ -4,7 +4,6 @@ import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib';
 import * as backend from './reach/build/index.main.mjs'
 import { useRef, useState } from 'react';
 import { views } from './utils/';
-// import { ConnectAccount, PasteContractInfo, SelectRole, TestView, WaitForAttacher } from './screens';
 import LandingPage from './screens/LandingPage';
 import { Box } from '@chakra-ui/react';
 import SelectGame from './screens/SelectGame';
@@ -15,10 +14,12 @@ import JoinGame from './screens/JoinGame';
 import Result from './screens/Result';
 import { toaster } from 'evergreen-ui';
 import InputUserType from './screens/InputUserType';
+import WaitingOthers from './screens/WaitingOthers';
+import WinnerEmerges from './screens/WinnerEmerges';
 
 const reach = loadStdlib('ALGO');
 reach.setWalletFallback(reach.walletFallback( { providerEnv: 'TestNet', MyAlgoConnect } ));
-const fmt = (x) => reach.formatCurrency(x, 4);
+// const fmt = (x) => reach.formatCurrency(x, 4);
 
 function App() {
   const [ view, setView ] = useState(views.CONNECT_ACCOUNT);
@@ -31,13 +32,15 @@ function App() {
   const [hand, setHand] = useState('');
   const [contractInfo, setContractInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [winner, setWinner] = useState('');
+  const [displayNewBal, setDisplayNewBal] = useState(false);
 
   const stdlib = loadStdlib(process.env);
   const toAU = (au) => stdlib.parseCurrency(au);
+  const toSU = (su) => stdlib.formatCurrency(su, 4);
   const balance = useRef();
 
-  const OUTCOME =["No winner", "Alice wins", "Bob wins", "Charlie wins"];
-  
+  const OUTCOME =["No winner", "Alice wins", "Bob wins", "Charlie wins"];  
 
   const connectAccount = async () => {
     const getAccount = async () => {
@@ -74,6 +77,38 @@ function App() {
     }
   };
 
+  const getNewBalance = async (e) => {
+    e.preventDefault();
+    setDisplayNewBal(true);
+    const getAccount = async () => {
+      try {
+        account.current = await reach.getDefaultAccount();
+        setAccount(account);
+        toaster.success(`Account connected successfully`);
+      } catch (err) {
+        toaster.danger(`Error occured, can't retrieve your account`)
+      }
+    };
+
+    const getBalance = async () => {
+      try {
+        let rawBalance = await reach.balanceOf(account.current);
+        balance.current = reach.formatCurrency(rawBalance, 4);
+        setAccountBal(balance.current);
+        console.log("Balance :" + balance.current);
+      } catch (err) {
+        toaster.danger('Error occured')
+      }
+    };
+
+    try {
+      await getAccount();
+      await getBalance();
+    } catch (err) {
+      toaster.danger('Error occured')
+    }
+  };
+
   const getUserType = (user) => {
     setUserType(user);
   };
@@ -83,47 +118,61 @@ function App() {
   };
 
   const getGuessNumber = (guess) => {
-    setUserGuess(guess)
+    setUserGuess(guess);
   };
 
   const getContractDetails = (details) => {
-    setPlayerContractDetails(details)
+    setPlayerContractDetails(details);
   };
 
-  console.log(stakePrice);
+  const getHandValue = (handValue) => {
+    console.log(handValue);
+    setHand(Number(handValue));
+  };
 
-  // const playerInteract = (role) => ({
-  //   makeGuess: () => { 
-  //     console.log(`The ${role} made a ${guess}`);
-  //     toaster.success(`The ${role} made a ${guess}`);
-  //     return guess;
-  //    },
-  //   throwHand: () => {
-  //     console.log(`The ${role} made a ${hand}`);
-  //     toaster.success(`The ${role} made a ${hand}`);
-  //     return hand;
-  //   },
-  //   getResult: (outcome) => {
-  //     toaster.success(`${role} saw result: ${OUTCOME[outcome]}`);
-  //     // console.log(`${name} saw result: ${OUTCOME[outcome]}`);
-  //   },
-  // });
-
-  const Player = (name) => ({
+  const PlayerMakeGuess = (name) => ({
     makeGuess: () => {
-      // const guess = Math.floor(Math.random() * 16);
       console.log(`${name} guessed ${userGuess}`);
+      toaster.success(`${name} guessed ${userGuess}`);
       return userGuess;
     },
     throwHand: () => {
-      const hand = Math.floor(Math.random() * 6);
-      console.log(`${name} throwed ${hand} fingers`);
+      console.log(`The ${name} made a ${hand}`);
+      toaster.success(`The ${name} made a ${hand}`);
       return hand;
     },
     getResult: (outcome) => {
-      console.log(`${name} saw result: ${OUTCOME[outcome]}`);
+      console.log(outcome, '--> outcome res');
+      toaster.success(`${name} saw result: ${OUTCOME[outcome]}`);
+      setWinner(`${OUTCOME[outcome]}`);
+      setView(views.WINNER)
+    },
+  });
+
+  const handleCreateGame = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      const aliceInteract = {
+        ...PlayerMakeGuess('Alice'),
+        ...stdlib.hasRandom,
+        wager: toAU(stakePrice),
+        reportReady: async (stakePrice) => {
+          setContractInfo(`${JSON.stringify(await ctcAlice.getInfo())}`);
+          toaster.success(`You set the morra game with a wager of ${toSU(stakePrice)} ALGO`)
+          setIsLoading(false);
+          setView(views.GAME_ID);
+        }
+      }
+      const ctcAlice = await account.current.contract(backend);
+      await ctcAlice.participants.Alice(aliceInteract);
+      console.log(ctcAlice, '--> on await');
+    } catch (error) {
+      toaster.danger('Error occured')
+      setIsLoading(false);
+      console.log(error);
     }
-  })
+  };
 
   const proceedPlayGame = async (e) => {
     e.preventDefault();
@@ -131,65 +180,47 @@ function App() {
       try {
         setIsLoading(true);
         const bobInteract = {
-          ...Player('Bob'),
+          ...PlayerMakeGuess('Bob'),
           ...stdlib.hasRandom,
           acceptWager: (amt) => {
             toaster.success(`Bob accepts the wager of ${amt}`);
           },
           reportReady: async () => {
             setIsLoading(false);
-            setView(views.GAME_ID)
+            setView(views.WAITING_FOR_OTHERS);
           }
         }
         const info = JSON.parse(playerContractDetails);
         const ctcBob = await account.current.contract(backend, info);
         await ctcBob.participants.Bob(bobInteract);
       } catch (error) {
+        toaster.danger('Error occured');
+        console.log(error);
+      };
+    } else if (userType === 'Charlie') {
+      try {
+        setIsLoading(true);
+        const charlieInteract = {
+          ...PlayerMakeGuess('Charlie'),
+          ...stdlib.hasRandom,
+          acceptWager: (amt) => {
+            toaster.success(`Charlie accepts the wager of ${amt}`);
+          },
+          reportReady: async () => {
+            setIsLoading(false);
+            setView(views.WAITING_FOR_OTHERS);
+          }
+        }
+        const info = JSON.parse(playerContractDetails);
+        const ctcCharlie = await account.current.contract(backend, info);
+        await ctcCharlie.participants.Charlie(charlieInteract);
+      } catch (error) {
         toaster.danger('Error occured')
         console.log(error);
       }
-      setView(views.JOIN_GAME);
-    } else if (userType === 'Charlie') {
-      setView(views.JOIN_GAME);
     }
   };
 
-
-  const handleCreateGame = async (e) => {
-    e.preventDefault();
-    try {
-      setIsLoading(true);
-      const aliceInteract = {
-        ...Player('Alice'),
-        ...stdlib.hasRandom,
-        wager: toAU(stakePrice),
-        reportReady: async (stakePrice) => {
-          setContractInfo(`${JSON.stringify(await ctcAlice.getInfo())}`);
-          toaster.success(`You set the morra game with a wager of ${stakePrice}`)
-          setIsLoading(false);
-          setView(views.GAME_ID)
-        }
-      }
-      const ctcAlice = await account.current.contract(backend);
-      await ctcAlice.participants.Alice(aliceInteract);
-    } catch (error) {
-      toaster.danger('Error occured')
-      setIsLoading(false);
-    }
-  };
-
-  const handlePlayGame = async (e) => {
-    e.preventDefault();
-    try {
-      
-    } catch (error) {
-      toaster.danger(error);
-      console.log(error);
-    }
-  }
-
-  console.log(userType);
-  
   return (
     <Box className="App">
       <header className="App-header">
@@ -197,7 +228,7 @@ function App() {
         {
           view === views.PLAY_GAME && 
           <SelectGame
-            accountBal={accountBal}
+            accountBal={accountBal === '' ? 0 : accountBal}
             createGame={(e) => { setUserType('Alice'); setView(views.CREATE_GAME); e.preventDefault() }}
             joinGame={(e) => { setView(views.USER_TYPE); e.preventDefault(); }}
           />
@@ -205,11 +236,13 @@ function App() {
         {
           view === views.USER_TYPE && 
           <InputUserType
-            accountBal={accountBal}
+            accountBal={accountBal === '' ? 0 : accountBal}
             getUserType={getUserType}
             playGame={proceedPlayGame}
             getUserGuess={getGuessNumber}
             getContractDetails={getContractDetails}
+            isLoading={isLoading}
+            getHand={getHandValue}
           />
         }
         {
@@ -220,11 +253,35 @@ function App() {
             accountBal={accountBal}
             getGuessNumber={getGuessNumber}
             isLoading={isLoading}
+            getHand={getHandValue}
           />
         }
-        {view === views.GAME_ID && <DisplayGameID playGame={() => setView(views.PLAY_GAME)} contractInfo={contractInfo} accountBal={accountBal} />}
+        {
+          view === views.GAME_ID &&
+          <DisplayGameID
+            playGame={(e) => { setView(views.JOIN_GAME); e.preventDefault(); }}
+            contractInfo={contractInfo}
+            accountBal={accountBal === '' ? 0 : accountBal} 
+            waitForPlayer={(e) => { setView(views.WAITING_FOR_OTHERS); e.preventDefault(); }}
+          />
+        }
+        {view === views.WAITING_FOR_OTHERS && <WaitingOthers accountBal={accountBal === '' ? 0 : accountBal}  />}
+        {view === views.WINNER && 
+          <WinnerEmerges
+            getBalance={getNewBalance}
+            accountBal={accountBal}
+            displayNewBal={displayNewBal}
+            goHome={() => setView(views.CREATE_GAME)}
+            winnerName={winner}
+          />
+        }
+        {view === views.JOIN_GAME && 
+          <JoinGame
+            getHand={getHandValue}
+            accountBal={accountBal === '' ? 0 : accountBal} 
+          />
+        }
         {view === views.PLAY_GAME_NOW && <PlayGameNow handleJoinGame={() => setView(views.JOIN_GAME)} />}
-        {view === views.JOIN_GAME && <JoinGame handleSubmit={() => setView(views.SUBMIT_HAND)} />}
         {view === views.SUBMIT_HAND && <Result goHome={() => setView(views.CONNECT_ACCOUNT)} />}
       </header>
     </Box>

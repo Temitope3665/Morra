@@ -9,6 +9,7 @@ const Player = {
   makeGuess: Fun([], UInt),
   throwHand: Fun([], UInt),
   getResult: Fun([UInt], Null),
+  showAllHand: Fun([UInt], Null),
   informTimeout: Fun([], Null),
 };
 
@@ -28,7 +29,7 @@ export const main = Reach.App(() => {
   const Charlie = Participant('Charlie', {
     ...Player,
     acceptWager: Fun([UInt], Null),
-    // reportReady: Fun([UInt], Null),
+    reportReady: Fun([UInt], Null),
   });
   init();
 
@@ -59,6 +60,7 @@ export const main = Reach.App(() => {
   })
   Charlie.publish(charlieGuess)
     .pay(wager);
+  Charlie.interact.reportReady(wager);
 
   // Start throwing hand until there's a winner
   var outcome = 0;

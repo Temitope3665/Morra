@@ -8,6 +8,8 @@ export const views = {
   JOIN_GAME: 'Join game',
   SUBMIT_HAND: 'Submit hand',
   USER_TYPE: 'User type',
+  WAITING_FOR_OTHERS: 'Wait for others to play',
+  WINNER: 'Winner',
 
   //Deployer
   DEPLOYING: 'Deploying',

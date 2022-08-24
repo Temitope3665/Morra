@@ -3,7 +3,15 @@ import CommonButton from "../common/CommonButton";
 import TextInput from "../common/TextInput";
 import { logo } from "../svg";
 
-const InputUserType = ({ playGame, accountBal, getUserType, getUserGuess, isLoading, getContractDetails }) => {
+const InputUserType = ({
+  playGame,
+  accountBal,
+  getUserType,
+  getUserGuess,
+  isLoading,
+  getContractDetails,
+  getHand
+}) => {
   return (
     <Box>
       <Flex justifyContent="space-between" alignItems="center" px="50px">
@@ -42,17 +50,50 @@ const InputUserType = ({ playGame, accountBal, getUserType, getUserGuess, isLoad
               onChange={(e) => getUserGuess(e.target.value)}
             />
 
+            <Box mt="10px">
+              <Text color="brand.white" fontSize="20px" fontWeight="400">
+                Play a finger
+              </Text>
+              <Select
+                placeholder="Play a finger"
+                h="50px"
+                bg="brand.white"
+                w="60%"
+                m="20px auto"
+                onChange={(e) => getHand(e.target.value)}
+              >
+                <option value="1">
+                  <Text>👆🏼 Finger One</Text>
+                </option>
+                <option value="2">
+                  <Text>✌🏻 Finger Two</Text>
+                </option>
+                <option value="3">
+                  <Text>✌🏻 Finger Three</Text>
+                </option>
+                <option value="4">
+                  <Text>✌🏻 Finger Four</Text>
+                </option>
+                <option value="5">
+                  <Text>✌🏻 Finger Five</Text>
+                </option>
+                <option value="6">
+                  <Text>✌🏻 Finger Six</Text>
+                </option>
+              </Select>
+            </Box>
+
             <Textarea
-                _focus={{ border: "0.5px solid #F58220" }}
-                h="200px"
-                w="100%"
-                mt="20px"
-                onChange={(e) => getContractDetails(e.target.value)}
-                placeholder="Paste contract details"
-                color="brand.dark"
-                bg="white"
-                border="1px solid #F58220"
-              />
+              _focus={{ border: "0.5px solid #F58220" }}
+              h="100px"
+              w="100%"
+              mt="20px"
+              onChange={(e) => getContractDetails(e.target.value)}
+              placeholder="Paste contract details"
+              color="brand.dark"
+              bg="white"
+              border="1px solid #F58220"
+            />
             <CommonButton
               w="100%"
               color="brand.dark"

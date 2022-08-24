@@ -4,7 +4,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { toaster } from "evergreen-ui";
 import CommonButton from "../common/CommonButton";
 
-const DisplayGameID = ({ playGame, accountBal, contractInfo }) => {
+const DisplayGameID = ({ playGame, accountBal, contractInfo, waitForPlayer }) => {
   return (
     <Box>
       <Flex justifyContent="space-between" alignItems="center" px="50px">
@@ -39,7 +39,7 @@ const DisplayGameID = ({ playGame, accountBal, contractInfo }) => {
         </Box>
 
         <CopyToClipboard text={contractInfo} onCopy={() => toaster.success("Contract Info copied successfully")}>
-            <CommonButton mt="20px" w="100%" bg="none" h="50px" border="1px solid #F58220" color="brand.white">Copy to clipboard</CommonButton>
+            <CommonButton mt="20px" w="100%" bg="none" h="45px" border="1px solid #F58220" color="brand.white" onClick={waitForPlayer}>Copy to clipboard</CommonButton>
         </CopyToClipboard>
       </Box>
 
@@ -52,7 +52,7 @@ const DisplayGameID = ({ playGame, accountBal, contractInfo }) => {
         fontWeight="400"
         onClick={playGame}
       >
-        Start Game
+        Proceed
       </Button>
     </Box>
   );

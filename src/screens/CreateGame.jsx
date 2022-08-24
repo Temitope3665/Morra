@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Select, Text } from "@chakra-ui/react";
 import CommonButton from "../common/CommonButton";
 import TextInput from "../common/TextInput";
 import { logo } from "../svg";
@@ -9,6 +9,7 @@ const CreateGame = ({
   getStakePrice,
   getGuessNumber,
   isLoading,
+  getHand
 }) => {
   return (
     <Box>
@@ -47,6 +48,38 @@ const CreateGame = ({
               type="number"
               onChange={(e) => getStakePrice(e.target.value)}
             />
+                <Box mt="20px">
+              <Text color="brand.white" fontSize="20px" fontWeight="400">
+                Play a finger
+              </Text>
+              <Select
+                placeholder="Play a finger"
+                h="50px"
+                bg="brand.white"
+                w="60%"
+                m="20px auto"
+                onChange={(e) => getHand(e.target.value)}
+              >
+                <option value="1">
+                  <Text>👆🏼 Finger One</Text>
+                </option>
+                <option value="2">
+                  <Text>✌🏻 Finger Two</Text>
+                </option>
+                <option value="3">
+                  <Text>✌🏻 Finger Three</Text>
+                </option>
+                <option value="4">
+                  <Text>✌🏻 Finger Four</Text>
+                </option>
+                <option value="5">
+                  <Text>✌🏻 Finger Five</Text>
+                </option>
+                <option value="6">
+                  <Text>✌🏻 Finger Six</Text>
+                </option>
+              </Select>
+            </Box>
             <CommonButton
               w="100%"
               color="brand.dark"

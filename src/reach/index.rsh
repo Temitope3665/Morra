@@ -1,3 +1,7 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 'reach 0.1';
 
 const Player = {
@@ -5,6 +9,7 @@ const Player = {
   makeGuess: Fun([], UInt),
   getGuesses: Fun([UInt, UInt, UInt], Null),
   throwHand: Fun([], UInt),
+  showAllHand: Fun([UInt], Null),
   getResult: Fun([UInt, UInt, UInt, UInt], Null),
   informTimeout: Fun([], Null),
 };
@@ -12,17 +17,20 @@ const Player = {
 export const main = Reach.App(() => {
   const Alice = Participant('Alice', {
     ...Player,
-    wager: UInt
+    wager: UInt,
+    reportReady: Fun([UInt], Null),
     // Specify Alice's interact interface here
   });
   const Bob = Participant('Bob', {
     ...Player,
-    acceptWager: Fun([UInt], Null)
+    acceptWager: Fun([UInt], Null),
+    reportReady: Fun([UInt], Null),
     // Specify Bob's interact interface here
   });
   const Charlie = Participant('Charlie', {
     ...Player,
-    acceptWager: Fun([UInt], Null)
+    acceptWager: Fun([UInt], Null),
+    reportReady: Fun([UInt], Null),
   });
   init();
 
@@ -34,6 +42,7 @@ export const main = Reach.App(() => {
   })
   Alice.publish(wager, aliceGuess)
     .pay(wager);
+  Alice.interact.reportReady(wager);
   commit();
 
   // Others always attach
@@ -43,6 +52,7 @@ export const main = Reach.App(() => {
   })
   Bob.publish(bobGuess)
     .pay(wager);
+  Bob.interact.reportReady(wager);
   commit();
   
   Charlie.only(() => {
@@ -51,6 +61,7 @@ export const main = Reach.App(() => {
   })
   Charlie.publish(charlieGuess)
     .pay(wager);
+  Charlie.interact.reportReady(wager);
 
   each([Alice, Bob, Charlie], () => {
     interact.getGuesses(aliceGuess, bobGuess, charlieGuess);
@@ -129,3 +140,4 @@ export const main = Reach.App(() => {
 
   exit();
 });
+

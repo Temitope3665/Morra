@@ -1,5 +1,6 @@
 import {loadStdlib} from '@reach-sh/stdlib';
 import * as backend from './build/index.main.mjs';
+
 const stdlib = loadStdlib(process.env);
 
 const startingBalance = stdlib.parseCurrency(100);
@@ -7,6 +8,9 @@ const startingBalance = stdlib.parseCurrency(100);
 const [ accAlice, accBob, accCharlie ] =
   await stdlib.newTestAccounts(3, startingBalance);
 
+// <<<<<<< HEAD:src/reach/index.mjs
+console.log('Welcome to Morra Game!');
+// =======
 const fmt = (x) => stdlib.formatCurrency(x, 4);
 const getBalance = async (name) => fmt(await stdlib.balanceOf(name));
 
@@ -20,6 +24,7 @@ await displayBalance(accBob, "Bob");
 await displayBalance(accCharlie, "Charlie");
 
 console.log('Welcome to Morra!');
+// >>>>>>> 00d091ec023de744bc7c894e337e60dff3276ba0:index.mjs
 const ctcAlice = accAlice.contract(backend);
 const ctcBob = accBob.contract(backend, ctcAlice.getInfo());
 const ctcCharlie = accCharlie.contract(backend, ctcAlice.getInfo());
@@ -60,7 +65,7 @@ await Promise.all([
   backend.Charlie(ctcCharlie, {
     ...stdlib.hasRandom,
     ...Player('Charlie'),
-    acceptWager: (amt) => console.log(`Bob accepts the wager of ${fmt(amt)}.`)
+    acceptWager: (amt) => console.log(`Charlie accepts the wager of ${fmt(amt)}.`)
   }),
 ]);
 
@@ -69,3 +74,4 @@ await displayBalance(accBob, "Bob");
 await displayBalance(accCharlie, "Charlie");
 
 console.log('Goodbye, Alice, Bob and Charlie!');
+

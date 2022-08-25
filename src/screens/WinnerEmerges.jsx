@@ -73,6 +73,11 @@ const WinnerEmerges = ({
           <Text ml="-10px">{charlieGuess}</Text>
           <Text>{charlieHand}</Text>
         </Flex>
+        <Flex color="brand.primary" justifyContent="space-around" mt="20px">
+          <Text>Sum</Text>
+          <Text ml="-10px"></Text>
+          <Text ml="30px">{Number(bobHand) + Number(aliceHand) + Number(charlieHand)}</Text>
+        </Flex>
       </Box>
 
       <CommonButton

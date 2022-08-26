@@ -38,8 +38,8 @@ const WinnerEmerges = ({
         </Flex>
       </Flex>
 
-      <Image src={imgLink} alt="congrats" w="200px" m="-10px auto" />
-      <Box mt="20px">
+      <Image src={imgLink} alt="congrats" w="200px" m="-20px auto" />
+      <Box mt="5px">
         <Text color="brand.primary" fontWeight="700" mt="20px">
           {winnerName}
         </Text>
@@ -84,14 +84,14 @@ const WinnerEmerges = ({
         w="20%"
         color="brand.dark"
         bg="brand.white"
-        mt="30px"
+        mt="10px"
         hoverColor="brand.primary"
         onClick={getBalance}
       >
         Get Balance
       </CommonButton>
       {displayNewBal && (
-        <Text color="brand.white" mt="20px">
+        <Text color="brand.white" mt="10px" mb="20px">
           Your new balance is {accountBal}
         </Text>
       )}

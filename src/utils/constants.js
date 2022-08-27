@@ -10,16 +10,4 @@ export const views = {
   USER_TYPE: 'User type',
   WAITING_FOR_OTHERS: 'Wait for others to play',
   WINNER: 'Winner',
-
-  //Deployer
-  DEPLOYING: 'Deploying',
-  WAIT_FOR_ATTACHER: 'Wait for attacher',
-  
-  //Attacher
-  PASTE_CONTRACT_INFO: 'Paste contract info',
-  ATTACHING: 'Attaching',
-
-  //GENERIC
-  TIME_OUT: 'Timeout',
-  TEST_VIEW: 'Test view'
 }

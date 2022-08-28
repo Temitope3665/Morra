@@ -9,7 +9,7 @@ Rules:
 - Players display a number of fingers (0 - 6)
 - The winner is one who was able to guess the sum correctly
 
-#### How to Play the Game
+## How to Play Morra Game on our dApp
 - Visit **https://morra-game.vercel.app/**
 - You should ensure to have 3 players to play the game,
 - Then, ensure all the 3 players connect their account to ALGO first by clicking on **connect wallet** button,

@@ -9,6 +9,19 @@ Rules:
 - Players display a number of fingers (0 - 6)
 - The winner is one who was able to guess the sum correctly
 
+#### How to Play the Game
+- Visit **https://morra-game.vercel.app/**
+- You should ensure to have 3 players to play the game,
+- Then, ensure all the 3 players connect their account to ALGO first by clicking on **connect wallet** button,
+- Allow player 1 to create the game by clicking on **create game** button,
+- Player 1 name should be called Alice
+- Player input his/her guess, inputs his/her hand and set a stake for the game,
+- Player 2 and 3 joins the game by clicking on **join game** button,
+- Player 2 name should be tagged as **Bob** while player 3 name should be tagged as **Charlie**
+- Player 1 waits for player 2 and player 3 to select a guess and play their hands,
+- After which all players reveal their hand and the game started
+- The winner is one who was able to guess the sum correctly.
+
 ## Run Morra locally
 
 ### Prerequisite
